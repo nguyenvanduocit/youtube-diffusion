@@ -8,6 +8,7 @@
 </head>
 <body>
 <div id="controlPanel">
+    <button id="play-button">Play</button>
     <button id="theme-toggle">Toggle Theme</button>
     <button id="size-toggle">Toggle Screen</button>
     <br>
@@ -15,8 +16,9 @@
     <input type="range" id="blur-slider" min="0" max="50" value="20">
 </div>
 <div id="container">
+
     <canvas id="canvas" class="full"></canvas>
-    <video id="video" autoplay loop>
+    <video id="video" loop>
         <source src="/assets/thuong-ly-biet.mp4" type="video/mp4">
     </video>
 </div>
