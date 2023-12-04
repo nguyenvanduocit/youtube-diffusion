@@ -40,11 +40,16 @@ videoEl.addEventListener('play', () => {
     playButton.style.display = 'none';
 });
 
-videoEl.play().catch(() => {
-    playButton.style.display = 'inline-block';
+let hasUserInteracted = false;
 
-    // try to play again
-    setTimeout(() => {
-        videoEl.play()
-    }, 500)
-});
+function attemptAutoplay() {
+    if (!hasUserInteracted && videoEl.paused) {
+        videoEl.play().catch(() => {
+            playButton.style.display = 'inline-block';
+        });
+        hasUserInteracted = true;
+    }
+}
+
+document.addEventListener('keydown', attemptAutoplay);
+document.addEventListener('click', attemptAutoplay);
