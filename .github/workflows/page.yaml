@@ -12,6 +12,9 @@ jobs:
       - run: bun install
       - run: bun run build
   deploy:
+    permissions:
+      pages: write
+      id-token: write
     needs: build
     environment:
       name: github-pages
