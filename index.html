@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-theme">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Vite App</title>
+</head>
+<body>
+<div id="controlPanel">
+    <button id="theme-toggle">Toggle Theme</button>
+    <button id="size-toggle">Toggle Screen</button>
+    <br>
+    <label for="blur-slider">Blur:</label>
+    <input type="range" id="blur-slider" min="0" max="50" value="20">
+</div>
+<div id="container">
+    <canvas id="canvas" class="full"></canvas>
+    <video id="video" autoplay loop muted>
+        <source src="/assets/thuong-ly-biet.mp4" type="video/mp4">
+    </video>
+</div>
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

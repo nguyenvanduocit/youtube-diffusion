@@ -1,0 +1,49 @@
+:root
+  --color-background: #ffffff;
+  --color-text: #000000;
+
+.dark-theme
+  --color-background: #000000;
+  --color-text: #ffffff;
+
+body
+  background-color: var(--color-background);
+  color: var(--color-text);
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+#container
+  color: #2c3e50;
+  position: relative;
+  max-width: 800px;
+  width: 100%;
+  padding: 50px 80px;
+#video
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  overflow: hidden;
+#canvas
+  border-radius: 10px;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  &.full
+    position: fixed
+#controlPanel
+  position: fixed;
+  top: 50px;
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  z-index: 1;
