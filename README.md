@@ -21,3 +21,4 @@ Use video element to play the video and canvas element to render the video frame
 
 - [x] Diffusion effect
 - [ ] Make the border of the background fade out
+- [ ] Optimize the performance, reduce fps
