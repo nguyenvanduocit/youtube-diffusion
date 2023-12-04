@@ -34,6 +34,17 @@ blurSlider.addEventListener('input', () => {
 const playButton = document.querySelector<HTMLButtonElement>('#play-button')!;
 playButton.addEventListener('click', () => {
     videoEl.play();
-    // hide play button
-    playButton.classList.add('hidden');
+});
+
+videoEl.addEventListener('play', () => {
+    playButton.style.display = 'none';
+});
+
+videoEl.play().catch(() => {
+    playButton.style.display = 'inline-block';
+
+    // try to play again
+    setTimeout(() => {
+        videoEl.play()
+    }, 500)
 });
