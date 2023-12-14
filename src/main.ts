@@ -4,6 +4,17 @@ import {requestAnimationFrameWithFps, stopAnimationFrame} from "./fns/requestAni
 
 
 const videoEl = document.querySelector<HTMLVideoElement>('#video')!
+
+// get the id from url, then init source for videoEl
+const url = new URL(window.location.href);
+const id = url.searchParams.get('id');
+if (id) {
+    // add source element
+    const sourceEl = document.createElement('source');
+    sourceEl.src = `https://getube.fly.dev/${id}`;
+    videoEl.appendChild(sourceEl);
+}
+
 const canvasEl = document.querySelector<HTMLCanvasElement>('#canvas')!
 let analyser: AnalyserNode | null = null;
 
@@ -54,38 +65,21 @@ const processScaleEffect = () => {
 
     const scaled = minScale + normalized * maxScale;
     videoEl.style.transform = `scale(${scaled})`;
-
 }
 
-
-const themeToggleButton = document.querySelector<HTMLButtonElement>('#theme-toggle')!;
-themeToggleButton.addEventListener('click', () => {
-    document.documentElement.classList.toggle('dark-theme');
-});
-
-const sizeToggleButton = document.querySelector<HTMLButtonElement>('#size-toggle')!;
-sizeToggleButton.addEventListener('click', () => {
-    canvasEl.classList.toggle('full');
-});
-
-const blurSlider = document.querySelector<HTMLInputElement>('#blur-slider')!;
-blurSlider.addEventListener('input', () => {
-    const blurValue = blurSlider.value;
-    ctx.filter = `blur(${blurValue}px)`;
-});
-
+const controlPanelEl = document.querySelector<HTMLDivElement>('#controlPanel')!;
 const playButton = document.querySelector<HTMLButtonElement>('#play-button')!;
 playButton.addEventListener('click', () => {
     videoEl.play();
 });
 
 videoEl.addEventListener('play', () => {
-    playButton.style.display = 'none';
+    controlPanelEl.style.display = 'none';
     requestAnimationFrameWithFps('process-scale-effect', processScaleEffect, 30);
 });
 
 videoEl.addEventListener('pause', () => {
-    playButton.style.display = 'inline-block';
+    controlPanelEl.style.display = 'inline-block';
     stopAnimationFrame('process-scale-effect');
 });
 

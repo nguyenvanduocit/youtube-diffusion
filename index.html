@@ -9,17 +9,10 @@
 <body>
 <div id="controlPanel">
     <button id="play-button">Play</button>
-    <button id="theme-toggle">Toggle Theme</button>
-    <button id="size-toggle">Toggle Screen</button>
-    <br>
-    <label for="blur-slider">Blur:</label>
-    <input type="range" id="blur-slider" min="0" max="50" value="20">
 </div>
 <div id="container">
-
     <canvas id="canvas" class="full"></canvas>
-    <video id="video" autoplay loop>
-        <source src="/assets/mi-thanh-long.mp4" type="video/mp4">
+    <video id="video" autoplay loop crossorigin="anonymous">
     </video>
 </div>
 <script type="module" src="/src/main.ts"></script>
