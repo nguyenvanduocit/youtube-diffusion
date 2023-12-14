@@ -12,16 +12,16 @@ if (!id) {
     id = 'A662aiCky-c'
 }
 
-const response = await fetch(`http://localhost:8080/videos/${id}`)
-const videoData = await response.json()
-videoEl.src =  videoData.streamUrl
+fetch(`http://localhost:8080/videos/${id}`).then(async response => {
+    const videoData = await response.json()
+    videoEl.src = videoData.streamUrl
+})
 
 const canvasEl = document.querySelector<HTMLCanvasElement>('#canvas')!
 let analyser: AnalyserNode | null = null;
 
 const ctx = canvasEl.getContext('2d')!
 ctx.filter = 'blur(20px)'
-
 
 
 function drawFrame() {
