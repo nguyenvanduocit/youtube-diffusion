@@ -16,14 +16,27 @@ if (!id) {
     id = 'A662aiCky-c'
 }
 
-videoEl.src = `https://getube.fly.dev/stream/${id}`
+fetch(`https://getube.fly.dev/videos/${id}`).then(async response => {
+    const videoData = await response.json()
+    videoEl.src = videoData.streamUrl
+    //set cover
+    const coverUrl = videoData.thumbnail
+    const cover = new Image()
+    cover.src = coverUrl
+    cover.onload = () => {
+        ctx.drawImage(cover, 0, 0, canvasEl.width, canvasEl.height)
+    }
+
+    // set cover for the video
+    videoEl.poster = coverUrl
+
+    requestAnimationFrameWithFps('draw-frame', drawFrame, 30)
+})
+
 
 function drawFrame() {
     ctx.drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height)
 }
-
-requestAnimationFrameWithFps('draw-frame', drawFrame, 30)
-
 
 const initAnalyser = () => {
     const audioContext = new AudioContext();
