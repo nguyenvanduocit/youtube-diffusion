@@ -4,31 +4,26 @@ import {requestAnimationFrameWithFps, stopAnimationFrame} from "./fns/requestAni
 
 
 const videoEl = document.querySelector<HTMLVideoElement>('#video')!
-
-// get the id from url, then init source for videoEl
-const url = new URL(window.location.href)
-let id = url.searchParams.get('id')
-if (!id) {
-    id = 'A662aiCky-c'
-}
-
-fetch(`https://getube.fly.dev/videos/${id}`).then(async response => {
-    const videoData = await response.json()
-    videoEl.src = videoData.streamUrl
-})
-
 const canvasEl = document.querySelector<HTMLCanvasElement>('#canvas')!
 let analyser: AnalyserNode | null = null;
 
 const ctx = canvasEl.getContext('2d')!
 ctx.filter = 'blur(20px)'
 
+const url = new URL(window.location.href)
+let id = url.searchParams.get('id')
+if (!id) {
+    id = 'A662aiCky-c'
+}
+
+videoEl.src = `https://getube.fly.dev/stream/${id}`
 
 function drawFrame() {
     ctx.drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height)
 }
 
 requestAnimationFrameWithFps('draw-frame', drawFrame, 30)
+
 
 const initAnalyser = () => {
     const audioContext = new AudioContext();
