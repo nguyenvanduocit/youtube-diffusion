@@ -12,7 +12,7 @@ if (!id) {
     id = 'A662aiCky-c'
 }
 
-fetch(`http://localhost:8080/videos/${id}`).then(async response => {
+fetch(`https://getube.fly.dev/videos/${id}`).then(async response => {
     const videoData = await response.json()
     videoEl.src = videoData.streamUrl
 })
