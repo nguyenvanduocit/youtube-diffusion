@@ -77,7 +77,7 @@ const processScaleEffect = () => {
     const scaled = minScale + normalized * (maxScale - minScale)
     let transform = `scale(${scaled})`
 
-    const bassThreshold = 0.9
+    const bassThreshold = 0.95
     if (normalized > bassThreshold) {
         // random shift
         const shiftX = (Math.random() - 0.5) * 2 * 5
