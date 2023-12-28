@@ -41,7 +41,7 @@ const initAnalyser = () => {
     const audioContext = new AudioContext();
     const source = audioContext.createMediaElementSource(videoEl)
     analyser = audioContext.createAnalyser()
-    analyser.fftSize = 128
+    analyser.fftSize = 256
 
     source.connect(analyser)
     analyser.connect(audioContext.destination)
@@ -77,7 +77,7 @@ const processScaleEffect = () => {
     const scaled = minScale + normalized * (maxScale - minScale)
     let transform = `scale(${scaled})`
 
-    const bassThreshold = 0.95
+    const bassThreshold = 0.98
     if (normalized > bassThreshold) {
         // random shift
         const shiftX = (Math.random() - 0.5) * 2 * 5
@@ -92,7 +92,9 @@ const processScaleEffect = () => {
     const minBrightness = 0.1
     const maxBrightness = 1.8
     const brightness = minBrightness + normalized * (maxBrightness - minBrightness)
+
     ctx.filter = `brightness(${brightness}) blur(20px)`
+    videoEl.style.filter = `brightness(${1 + normalized * 0.5})`
 }
 
 const controlPanelEl = document.querySelector<HTMLDivElement>('#controlPanel')!
