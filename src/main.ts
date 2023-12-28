@@ -73,14 +73,25 @@ const processScaleEffect = () => {
 
     // scale
     const minScale = 0.7
-    const maxScale = 0.5 // +1
-    const scaled = minScale + normalized * maxScale
-    videoEl.style.transform = `scale(${scaled})`
+    const maxScale = 1.5
+    const scaled = minScale + normalized * (maxScale - minScale)
+    let transform = `scale(${scaled})`
+
+    const bassThreshold = 0.9
+    if (normalized > bassThreshold) {
+        // random shift
+        const shiftX = (Math.random() - 0.5) * 2 * 5
+        const shiftY = (Math.random() - 0.5) * 2 * 5
+        transform += ` translate(${shiftX}px, ${shiftY}px)`
+    }
+
+    videoEl.style.transform = transform
+
 
     // brightness
     const minBrightness = 0.1
-    const maxBrightness = 2
-    const brightness = minBrightness + normalized * maxBrightness
+    const maxBrightness = 1.8
+    const brightness = minBrightness + normalized * (maxBrightness - minBrightness)
     ctx.filter = `brightness(${brightness}) blur(20px)`
 }
 
