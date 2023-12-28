@@ -18,7 +18,7 @@ if (!id) {
 
 fetch(`https://getube.fly.dev/videos/${id}`).then(async response => {
     const videoData = await response.json()
-    videoEl.src = videoData.streamUrl
+
     //set cover
     const coverUrl = videoData.thumbnail
     const cover = new Image()
@@ -27,8 +27,7 @@ fetch(`https://getube.fly.dev/videos/${id}`).then(async response => {
         ctx.drawImage(cover, 0, 0, canvasEl.width, canvasEl.height)
     }
 
-    // set cover for the video
-    videoEl.poster = coverUrl
+    videoEl.src = 'https://getube.fly.dev/stream/' + id
 
     requestAnimationFrameWithFps('draw-frame', drawFrame, 30)
 })
