@@ -65,15 +65,23 @@ const processScaleEffect = () => {
 
     const data = new Uint8Array(analyser.frequencyBinCount)
     analyser.getByteFrequencyData(data)
-    const avg = data.reduce((a, b) => a + b) / data.length
+
+    const bass = data.reduce((a, b) => a + b) / data.length
     // avg is a number between 0 and 255, so we normalize it to be between 0 and 1 with a sensitivity factor
     const sensitivity = 0.5
-    const normalized = avg / (255 * sensitivity)
+    const normalized = bass / (255 * sensitivity)
+
+    // scale
     const minScale = 0.7
     const maxScale = 0.5 // +1
-
     const scaled = minScale + normalized * maxScale
     videoEl.style.transform = `scale(${scaled})`
+
+    // brightness
+    const minBrightness = 0.1
+    const maxBrightness = 2
+    const brightness = minBrightness + normalized * maxBrightness
+    ctx.filter = `brightness(${brightness}) blur(20px)`
 }
 
 const controlPanelEl = document.querySelector<HTMLDivElement>('#controlPanel')!
