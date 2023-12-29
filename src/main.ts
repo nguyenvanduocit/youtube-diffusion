@@ -27,7 +27,7 @@ fetch(`https://getube.firegroup.vn/videos/${id}`).then(async response => {
         ctx.drawImage(cover, 0, 0, canvasEl.width, canvasEl.height)
     }
 
-    videoEl.src = 'https://getube.fly.dev/stream/' + id
+    videoEl.src = 'https://getube.firegroup.vn/stream/' + id
 
     requestAnimationFrameWithFps('draw-frame', drawFrame, 30)
 })
