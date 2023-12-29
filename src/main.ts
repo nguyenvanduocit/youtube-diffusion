@@ -1,6 +1,7 @@
 import './style/modern-normalize.css'
 import './style/app.styl'
 import {requestAnimationFrameWithFps, stopAnimationFrame} from "./fns/requestAnimationFrameWithFps";
+import {fetchVideoData} from "./fns/fetchVideoData";
 
 
 const videoEl = document.querySelector<HTMLVideoElement>('#video')!
@@ -11,15 +12,17 @@ const ctx = canvasEl.getContext('2d')!
 ctx.filter = 'blur(20px)'
 
 const url = new URL(window.location.href)
-let id = url.searchParams.get('id')
-if (!id) {
-    id = 'A662aiCky-c'
+let ids = url.searchParams.get('ids')
+if (!ids) {
+    ids = 'A662aiCky-c'
 }
 
-fetch(`https://getube.firegroup.vn/videos/${id}`).then(async response => {
-    const videoData = await response.json()
+const idArray = ids.split(',');
+let currentVideoIndex = 0;
 
-    //set cover
+// Function to set video source and cover
+function setVideoSourceAndCover(videoData: VideoData, id: string) {
+    // set cover for the video
     const coverUrl = videoData.thumbnail
     const cover = new Image()
     cover.src = coverUrl
@@ -28,9 +31,26 @@ fetch(`https://getube.firegroup.vn/videos/${id}`).then(async response => {
     }
 
     videoEl.src = 'https://getube.firegroup.vn/stream/' + id
-
     requestAnimationFrameWithFps('draw-frame', drawFrame, 30)
-})
+}
+
+
+// Start by fetching the first video
+fetchVideoData(idArray[currentVideoIndex]).then(videoData => {
+    setVideoSourceAndCover(videoData, idArray[currentVideoIndex]);
+});
+
+videoEl.addEventListener('ended', () => {
+    currentVideoIndex++;
+    if (currentVideoIndex === idArray.length) {
+        currentVideoIndex = 0;
+    }
+
+    fetchVideoData(idArray[currentVideoIndex]).then(videoData => {
+        setVideoSourceAndCover(videoData, idArray[currentVideoIndex]);
+        videoEl.play();
+    });
+});
 
 
 function drawFrame() {
@@ -73,7 +93,7 @@ const processScaleEffect = () => {
 
     // scale
     const minScale = 0.7
-    const maxScale = 1.5
+    const maxScale = 1.2
     const scaled = minScale + normalized * (maxScale - minScale)
     let transform = `scale(${scaled})`
 
@@ -97,32 +117,57 @@ const processScaleEffect = () => {
     videoEl.style.filter = `brightness(${1 + normalized * 0.5})`
 }
 
-const controlPanelEl = document.querySelector<HTMLDivElement>('#controlPanel')!
-const playButton = document.querySelector<HTMLButtonElement>('#play-button')!
-playButton.addEventListener('click', () => {
-    videoEl.play()
+const toggleButtonEl = document.querySelector<HTMLButtonElement>('#toggleButton')!
+toggleButtonEl.addEventListener('click', () => {
+    attemptToPlay()
 });
 
 videoEl.addEventListener('play', () => {
-    controlPanelEl.style.display = 'none'
     requestAnimationFrameWithFps('process-scale-effect', processScaleEffect, 30)
 });
 
 videoEl.addEventListener('pause', () => {
-    controlPanelEl.style.display = 'inline-block'
     stopAnimationFrame('process-scale-effect')
 });
 
-let hasUserInteracted = false
+videoEl.addEventListener('timeupdate', () => {
+    const percent = videoEl.currentTime / videoEl.duration * 100;
+    // set variable for progress bar
+    document.documentElement.style.setProperty('--video-progress', percent + '%');
+});
 
-function attemptAutoplay() {
-    if (!hasUserInteracted && videoEl.paused) {
-        videoEl.play().catch(() => {
-            playButton.style.display = 'inline-block'
-        })
-        hasUserInteracted = true
+function adjustCanvasSize() {
+    // Get the width and height of the window
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+
+    // Calculate the aspect ratio of the window
+    const windowAspectRatio = windowWidth / windowHeight;
+
+    // The aspect ratio of the video is 16:9
+    const videoAspectRatio = 16 / 9;
+
+    if (windowAspectRatio > videoAspectRatio) {
+        // If the window is wider than the video, set the width of the canvas to the width of the window and adjust the height to maintain the aspect ratio
+        canvasEl.style.width = windowWidth + 'px';
+        canvasEl.style.height = (windowWidth / videoAspectRatio) + 'px';
+    } else {
+        // If the window is taller than the video, set the height of the canvas to the height of the window and adjust the width to maintain the aspect ratio
+        canvasEl.style.height = windowHeight + 'px';
+        canvasEl.style.width = (windowHeight * videoAspectRatio) + 'px';
     }
 }
 
-document.addEventListener('keydown', attemptAutoplay)
-document.addEventListener('click', attemptAutoplay)
+// Adjust the size of the canvas when the window is resized
+window.addEventListener('resize', adjustCanvasSize);
+adjustCanvasSize()
+
+function attemptToPlay() {
+    if (videoEl.paused) {
+        videoEl.play()
+        toggleButtonEl.textContent = 'Pause'
+    } else {
+        videoEl.pause()
+        toggleButtonEl.textContent = 'Play'
+    }
+}
