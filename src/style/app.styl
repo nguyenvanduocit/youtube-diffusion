@@ -1,10 +1,7 @@
 :root
   --color-background: #ffffff;
   --color-text: #000000;
-
-.dark-theme
-  --color-background: #000000;
-  --color-text: #ffffff;
+  --video-padding: 30%;
 
 body
   background-color: var(--color-background);
@@ -20,8 +17,8 @@ body
 #container
   color: #2c3e50;
   position: relative;
-  max-width: 70%;
-  max-height: 65%;
+  max-width: calc(100% - var(--video-padding));
+  max-height: calc(95% - var(--video-padding));
 #video
   width: 100%;
   max-height 100%;

@@ -8,10 +8,17 @@ const videoEl = document.querySelector<HTMLVideoElement>('#video')!
 const canvasEl = document.querySelector<HTMLCanvasElement>('#canvas')!
 let analyser: AnalyserNode | null = null;
 
+
 const ctx = canvasEl.getContext('2d')!
 ctx.filter = 'blur(20px)'
 
 const url = new URL(window.location.href)
+
+let videoPadding = url.searchParams.get('video-padding')
+if (videoPadding) {
+    document.documentElement.style.setProperty('--video-padding', videoPadding + '%');
+}
+
 let ids = url.searchParams.get('ids')
 if (!ids) {
     ids = 'A662aiCky-c'
@@ -131,8 +138,10 @@ videoEl.addEventListener('pause', () => {
 });
 
 videoEl.addEventListener('timeupdate', () => {
-    const percent = videoEl.currentTime / videoEl.duration * 100;
-    // set variable for progress bar
+    let percent = 0;
+    if (videoEl.duration) {
+        percent = videoEl.currentTime / videoEl.duration * 100;
+    }
     document.documentElement.style.setProperty('--video-progress', percent + '%');
 });
 
