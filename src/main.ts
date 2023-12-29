@@ -16,7 +16,7 @@ if (!id) {
     id = 'A662aiCky-c'
 }
 
-fetch(`https://getube.fly.dev/videos/${id}`).then(async response => {
+fetch(`https://getube.firegroup.vn/videos/${id}`).then(async response => {
     const videoData = await response.json()
 
     //set cover
