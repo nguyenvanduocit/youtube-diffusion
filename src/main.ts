@@ -150,11 +150,13 @@ nextButtonEl.addEventListener('click', playNextVideo);
 
 videoEl.addEventListener('play', () => {
     requestAnimationFrameWithFps('process-scale-effect', processScaleEffect, 30)
+    toggleButtonEl.textContent = 'Pause'
     nextButtonEl.style.display = 'block'
 });
 
 videoEl.addEventListener('pause', () => {
     stopAnimationFrame('process-scale-effect')
+    toggleButtonEl.textContent = 'Play'
     nextButtonEl.style.display = 'none'
 });
 
@@ -200,9 +202,7 @@ adjustCanvasSize()
 function attemptToPlay() {
     if (videoEl.paused) {
         videoEl.play()
-        toggleButtonEl.textContent = 'Pause'
     } else {
         videoEl.pause()
-        toggleButtonEl.textContent = 'Play'
     }
 }
