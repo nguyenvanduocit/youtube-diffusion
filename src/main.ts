@@ -2,6 +2,7 @@ import './style/modern-normalize.css'
 import './style/app.styl'
 import {requestAnimationFrameWithFps, stopAnimationFrame} from "./fns/requestAnimationFrameWithFps";
 import {fetchVideoData} from "./fns/fetchVideoData";
+import {fetchPlaylist} from "./fns/fetchPlaylist";
 
 
 const videoEl = document.querySelector<HTMLVideoElement>('#video')!
@@ -20,11 +21,18 @@ if (videoPadding) {
 }
 
 let ids = url.searchParams.get('ids')
-if (!ids) {
-    ids = 'A662aiCky-c'
+
+let idArray = ids?.split(',') || []
+
+let playlistId = url.searchParams.get('playlist-id')
+if (playlistId) {
+    const fetchPlaylistResponse = await fetchPlaylist(playlistId)
+    for (const video of fetchPlaylistResponse.videos) {
+        idArray.push(video.id)
+    }
 }
 
-const idArray = ids.split(',');
+
 let currentVideoIndex = 0;
 
 // Function to set video source and cover

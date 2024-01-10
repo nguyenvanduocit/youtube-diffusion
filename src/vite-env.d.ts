@@ -2,4 +2,11 @@
 
 declare type VideoData = {
     thumbnail: string
+    title: string
+    id: string
+}
+
+
+declare type FetchPlaylistResponse = {
+    videos: VideoData[]
 }
