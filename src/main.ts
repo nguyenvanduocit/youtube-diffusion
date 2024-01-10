@@ -32,6 +32,13 @@ if (playlistId) {
     }
 }
 
+let order = url.searchParams.get('order')
+if (order === 'random') {
+    idArray = idArray.sort(() => Math.random() - 0.5)
+} else if (order === 'reverse') {
+    idArray = idArray.reverse()
+}
+
 
 let currentVideoIndex = 0;
 
