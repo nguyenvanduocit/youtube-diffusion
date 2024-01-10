@@ -62,7 +62,7 @@ fetchVideoData(idArray[currentVideoIndex]).then(videoData => {
     setVideoSourceAndCover(videoData, idArray[currentVideoIndex]);
 });
 
-videoEl.addEventListener('ended', () => {
+function playNextVideo() {
     currentVideoIndex++;
     if (currentVideoIndex === idArray.length) {
         currentVideoIndex = 0;
@@ -72,7 +72,8 @@ videoEl.addEventListener('ended', () => {
         setVideoSourceAndCover(videoData, idArray[currentVideoIndex]);
         videoEl.play();
     });
-});
+}
+
 
 
 function drawFrame() {
@@ -144,13 +145,23 @@ toggleButtonEl.addEventListener('click', () => {
     attemptToPlay()
 });
 
+const nextButtonEl = document.querySelector<HTMLButtonElement>('#nextButton')!
+nextButtonEl.addEventListener('click', playNextVideo);
+
 videoEl.addEventListener('play', () => {
     requestAnimationFrameWithFps('process-scale-effect', processScaleEffect, 30)
+    nextButtonEl.style.display = 'block'
 });
 
 videoEl.addEventListener('pause', () => {
     stopAnimationFrame('process-scale-effect')
+    nextButtonEl.style.display = 'none'
 });
+
+videoEl.addEventListener('ended', () => {
+    playNextVideo()
+});
+
 
 videoEl.addEventListener('timeupdate', () => {
     let percent = 0;
