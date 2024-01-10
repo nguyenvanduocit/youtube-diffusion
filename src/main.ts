@@ -129,7 +129,7 @@ const processScaleEffect = () => {
     const brightness = minBrightness + normalized * (maxBrightness - minBrightness)
 
     ctx.filter = `brightness(${brightness}) blur(20px)`
-    videoEl.style.filter = `brightness(${1 + normalized * 0.5})`
+    //videoEl.style.filter = `brightness(${1 + normalized * 0.5})`
 }
 
 const toggleButtonEl = document.querySelector<HTMLButtonElement>('#toggleButton')!
